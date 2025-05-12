@@ -1,14 +1,28 @@
 import React from 'react';
-import { MdOutlineRadioButtonUnchecked, MdOutlineCheckCircleOutline, MdDeleteOutline } from "react-icons/md"; // Using Material Design Icons for consistency
+import {
+  MdOutlineRadioButtonUnchecked,
+  MdOutlineCheckCircleOutline,
+  MdDeleteOutline
+} from "react-icons/md";
+import { FiEdit3, FiCheck } from "react-icons/fi";
 
-const TodoItems = ({ todo, onToggleComplete, onDeleteTodo }) => {
+const TodoItems = ({
+  todo,
+  isEditing,
+  editingValue,
+  onToggleComplete,
+  onDeleteTodo,
+  onStartEdit,
+  onEditChange,
+  onSaveEdit
+}) => {
   return (
     <li
       className={`flex items-center p-3.5 rounded-lg transition-all duration-300 ease-in-out group
-                  ${todo.isCompleted
-                    ? 'bg-green-50 text-gray-500'
-                    : 'bg-slate-100 hover:bg-slate-200'
-                  }`}
+                ${todo.isCompleted
+                  ? 'bg-green-50 text-gray-500'
+                  : 'bg-slate-100 hover:bg-slate-200'
+                }`}
     >
       <button
         onClick={() => onToggleComplete(todo.id)}
@@ -21,12 +35,41 @@ const TodoItems = ({ todo, onToggleComplete, onDeleteTodo }) => {
         }
       </button>
 
-      <div
-        className={`flex-grow cursor-pointer text-gray-800 ${todo.isCompleted ? 'line-through' : ''}`}
-        onClick={() => onToggleComplete(todo.id)} // Allow clicking text to toggle
-      >
-        {todo.text}
-      </div>
+      {isEditing ? (
+        <input
+          type="text"
+          value={editingValue}
+          onChange={onEditChange}
+          onKeyDown={(e) => e.key === 'Enter' && onSaveEdit(todo.id)}
+          className="flex-grow border rounded px-2 py-1 text-gray-700 bg-white"
+          autoFocus
+        />
+      ) : (
+        <div
+          className={`flex-grow cursor-pointer text-gray-800 ${todo.isCompleted ? 'line-through' : ''}`}
+          onClick={() => onToggleComplete(todo.id)}
+        >
+          {todo.text}
+        </div>
+      )}
+
+      {isEditing ? (
+        <button
+          onClick={() => onSaveEdit(todo.id)}
+          className="text-green-500 hover:text-green-600 ml-3 text-xl p-1 rounded-full hover:bg-green-100"
+          aria-label="Save edit"
+        >
+          <FiCheck />
+        </button>
+      ) : (
+        <button
+          onClick={() => onStartEdit(todo.id, todo.text)}
+          className="text-gray-400 hover:text-blue-500 ml-3 text-xl p-1 rounded-full hover:bg-blue-100"
+          aria-label="Edit todo"
+        >
+          <FiEdit3 />
+        </button>
+      )}
 
       <button
         onClick={() => onDeleteTodo(todo.id)}

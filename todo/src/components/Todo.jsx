@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MdChecklist } from "react-icons/md";
-import TodoItems from './TodoItems'; 
+import TodoItems from './TodoItems';
+
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [editingValue, setEditingValue] = useState('');
 
-  
   const addTodo = () => {
     if (inputValue.trim() === '') {
       alert("Please enter a todo!");
       return;
     }
-    
+
     const newTodo = {
       id: Date.now(),
       text: inputValue,
       isCompleted: false,
     };
     setTodos(prevTodos => [...prevTodos, newTodo]);
-    setInputValue(''); 
+    setInputValue('');
   };
 
   const handleInputChange = (event) => {
@@ -37,12 +39,30 @@ const Todo = () => {
         todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
       )
     );
-   
   };
 
   const deleteTodo = (id) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  };
 
+  const startEditing = (id, currentText) => {
+    setEditingId(id);
+    setEditingValue(currentText);
+  };
+
+  const handleEditChange = (e) => {
+    setEditingValue(e.target.value);
+  };
+
+  const saveEdit = (id) => {
+    if (editingValue.trim() === '') return;
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
+        todo.id === id ? { ...todo, text: editingValue } : todo
+      )
+    );
+    setEditingId(null);
+    setEditingValue('');
   };
 
   return (
@@ -52,7 +72,6 @@ const Todo = () => {
         <h1 className='text-2xl md:text-3xl font-semibold text-gray-700'>To-Do List</h1>
       </div>
 
-      {/***********************INPUT**********************/}
       <div className='flex items-center my-6 md:my-7 bg-gray-100 rounded-full'>
         <input
           type="text"
@@ -64,26 +83,30 @@ const Todo = () => {
         />
         <button
           onClick={addTodo}
-          className='rounded-full bg-yellow-500 text-white w-auto px-6 md:px-8 h-11 md:h-12 cursor-pointer text-base md:text-lg font-medium hover:bg-yellow-600 transition-colors mr-1' 
+          className='rounded-full bg-yellow-500 text-white w-auto px-6 md:px-8 h-11 md:h-12 cursor-pointer text-base md:text-lg font-medium hover:bg-yellow-600 transition-colors mr-1'
         >
           Add
         </button>
       </div>
 
-      {/***********************TODO LIST DISPLAY**********************/}
-      <div className='mt-4 flex-grow overflow-y-auto pr-2'> {/* Added pr-2 for scrollbar spacing if needed */}
+      <div className='mt-4 flex-grow overflow-y-auto pr-2'>
         {todos.length === 0 && (
           <p className="text-center text-gray-500 py-10 text-lg">
             Add a task to get started.
           </p>
         )}
-        <ul className="space-y-3"> 
+        <ul className="space-y-3">
           {todos.map(todo => (
             <TodoItems
               key={todo.id}
               todo={todo}
+              isEditing={editingId === todo.id}
+              editingValue={editingValue}
               onToggleComplete={toggleComplete}
               onDeleteTodo={deleteTodo}
+              onStartEdit={startEditing}
+              onEditChange={handleEditChange}
+              onSaveEdit={saveEdit}
             />
           ))}
         </ul>
