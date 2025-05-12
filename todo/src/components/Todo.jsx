@@ -5,14 +5,7 @@ const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
-  useEffect(() => {
-    const initialTodosFromBackend = [
-      { id: Date.now() + 1, text: "Learn React Hooks", isCompleted: false },
-      { id: Date.now() + 2, text: "Build a To-Do App Frontend", isCompleted: true },
-      { id: Date.now() + 3, text: "Connect to Backend API", isCompleted: false },
-    ];
-    setTodos(initialTodosFromBackend);
-  }, []); 
+  
   const addTodo = () => {
     if (inputValue.trim() === '') {
       alert("Please enter a todo!");
@@ -81,7 +74,7 @@ const Todo = () => {
       <div className='mt-4 flex-grow overflow-y-auto pr-2'> {/* Added pr-2 for scrollbar spacing if needed */}
         {todos.length === 0 && (
           <p className="text-center text-gray-500 py-10 text-lg">
-            Your to-do list is empty! <br /> Add a task to get started.
+            Add a task to get started.
           </p>
         )}
         <ul className="space-y-3"> 
