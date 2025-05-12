@@ -60,18 +60,18 @@ const Todo = () => {
       </div>
 
       {/***********************INPUT**********************/}
-      <div className='flex items-center my-6 md:my-7 bg-gray-100 rounded-full'> {/* Changed to rounded-full */}
+      <div className='flex items-center my-6 md:my-7 bg-gray-100 rounded-full'>
         <input
           type="text"
           placeholder='Add a new todo...'
           value={inputValue}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
-          className='bg-transparent border-0 outline-none flex-grow text-base md:text-lg placeholder:text-gray-400 px-5 py-3' // Adjusted padding and text size
+          className='bg-transparent border-0 outline-none flex-grow text-base md:text-lg placeholder:text-gray-400 px-5 py-3'
         />
         <button
           onClick={addTodo}
-          className='rounded-full bg-yellow-500 text-white w-auto px-6 md:px-8 h-11 md:h-12 cursor-pointer text-base md:text-lg font-medium hover:bg-yellow-600 transition-colors mr-1' // Adjusted padding, font-medium, mr-1 for spacing
+          className='rounded-full bg-yellow-500 text-white w-auto px-6 md:px-8 h-11 md:h-12 cursor-pointer text-base md:text-lg font-medium hover:bg-yellow-600 transition-colors mr-1' 
         >
           Add
         </button>
